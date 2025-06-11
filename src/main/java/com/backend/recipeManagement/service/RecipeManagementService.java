@@ -60,9 +60,21 @@ public class RecipeManagementService implements IRecipeManagementService {
       recipe.setCreatedBy(1L);
       recipe.setCreatedDate(LocalDateTime.now());
     }
-    recipe.setTitle(dto.title());
-    recipe.setDescription(dto.description());
-    recipe.setCookingTime(dto.cookingTime());
+    if (dto.title() != null && !dto.title().isBlank()) {
+      recipe.setTitle(dto.title());
+    } else {
+      throw new IllegalArgumentException("Title cannot be empty");
+    }
+    if (dto.description() != null && !dto.description().isBlank()) {
+      recipe.setDescription(dto.description());
+    } else {
+      throw new IllegalArgumentException("Description cannot be empty");
+    }
+    if (dto.cookingTime() != null && !dto.cookingTime().isBlank()) {
+      recipe.setCookingTime(dto.cookingTime());
+    } else {
+      throw new IllegalArgumentException("Cooking Time cannot be empty");
+    }
     recipe.setActiveFlag("A");
     recipeRepository.save(recipe);
   }
@@ -75,11 +87,10 @@ public class RecipeManagementService implements IRecipeManagementService {
     recipe.setUpdatedBy(1L);
     recipe.setUpdatedDate(LocalDateTime.now());
     recipe.setActiveFlag("I");
-    if (dto.reason() == null) {
-      if (dto.reason() == null || dto.reason().isBlank()) {
-        throw new IllegalArgumentException("Please enter reason");
-      }
-      recipe.setReason(dto.reason());
+    if (dto.reason() != null && !dto.reason().isBlank()) {
+      recipe.setDescription(dto.reason());
+    } else {
+      throw new IllegalArgumentException("Reason cannot be empty");
     }
 
     recipeRepository.save(recipe);
